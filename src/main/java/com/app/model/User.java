@@ -22,7 +22,7 @@ public class User {
 	private String firstName;
 
 	@Column(name = "last_name")
-	private String lasName;
+	private String lastName;
 
 	@Column(name = "email", nullable = false, unique = true)
 	private String email;
@@ -49,5 +49,5 @@ public class User {
 	private Timestamp updatedAt;
 
 	@Column(name = "status")
-	private int status;
+	private String status;
 }

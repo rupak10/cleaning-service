@@ -24,11 +24,11 @@ public class DBSeeder {
         if (userRepository.count() == 0) {
             User user = new User();
             user.setFirstName("Jabbi");
-            user.setLasName("01");
+            user.setLastName("01");
             user.setGender("Male");
             user.setEmail("jabbi@gmail.com");
-            user.setStatus(1);
-            user.setRole("ROLE_ADMIN");
+            user.setStatus("Approved");
+            user.setRole("ADMIN");
             user.setPassword(CommonUtil.getEncodedPassword("123456"));
             user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
             userRepository.save(user);

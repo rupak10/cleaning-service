@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CleanerDTO {
+    private String sl;
     private String id;
     private String name;
+    private String status;
 }

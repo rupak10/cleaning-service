@@ -1,9 +1,6 @@
 package com.app.service;
 
-import com.app.dto.AppResponse;
-import com.app.dto.CleanerDTO;
-import com.app.dto.LoginRequest;
-import com.app.dto.SignupRequest;
+import com.app.dto.*;
 import com.app.model.User;
 import com.app.repository.UserRepository;
 import com.app.util.CommonUtil;
@@ -36,6 +33,10 @@ public class UserService {
                 return new AppResponse(false, "Wrong Credentials !");
             }
 
+            if(userOptional.get().getStatus().equals("Pending")){
+                return new AppResponse(false, "Admin approval needed !");
+            }
+
             return new AppResponse(true, "Login Success.");
         }
         catch (Exception e) {
@@ -57,18 +58,18 @@ public class UserService {
 
             User user = new User();
             user.setFirstName(signupRequest.getFirstName());
-            user.setLasName(signupRequest.getLastName());
+            user.setLastName(signupRequest.getLastName());
             user.setEmail(signupRequest.getEmail());
             user.setPassword(CommonUtil.getEncodedPassword(signupRequest.getPassword()));
             user.setGender(signupRequest.getGender());
 
             if(signupRequest.getRegistrationType().equals("USER")){
-                user.setRole("ROLE_USER");
-                user.setStatus(1);
+                user.setRole("USER");
+                user.setStatus("Approved");
             }
             else {
-                user.setRole("ROLE_CLEANER");
-                user.setStatus(1);
+                user.setRole("CLEANER");
+                user.setStatus("Pending");
             }
             user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
             userRepository.save(user);
@@ -77,6 +78,31 @@ public class UserService {
         catch (Exception e) {
             e.printStackTrace();
             return new AppResponse(false, "Registration Failed !");
+        }
+    }
+
+    public AppResponse approveCleaner(CleanerDTO cleanerDTO, User loggedInUser) {
+        try {
+            if(!RequestValidator.isCleanerApprovalRequestValid(cleanerDTO)){
+                return new AppResponse(false, "Invalid value provided !");
+            }
+
+            Optional<User> cleanerOptional = userRepository.findById(Long.valueOf(cleanerDTO.getId()));
+            if(cleanerOptional.isEmpty()) {
+                return new AppResponse(false, "Invalid value provided !");
+            }
+
+            User user = cleanerOptional.get();
+            user.setStatus("Approved");
+            user.setUpdatedBy(loggedInUser.getUserId());
+            user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+
+            userRepository.save(user);
+            return new AppResponse(true, "Cleaner Approved.");
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return new AppResponse(false, "Failed to approve cleaner !");
         }
     }
 
@@ -91,15 +117,36 @@ public class UserService {
         }
     }
 
-    public List<CleanerDTO> getActiveCleanerList() {
+    public List<ListVo> getActiveCleanerList() {
         try {
-            List<User> users = userRepository.findByRoleAndStatus("ROLE_CLEANER", 1);
+            List<User> users = userRepository.findByRoleAndStatus("CLEANER", "Approved");
+            List<ListVo> cleanerList = new ArrayList<ListVo>();
+            cleanerList.add(new ListVo("", "--select one--"));
+            for(User user : users) {
+                ListVo listVo = new ListVo();
+                listVo.setKey(String.valueOf(user.getUserId()));
+                listVo.setValue(CommonUtil.getFormattedName(user));
+                cleanerList.add(listVo);
+            }
+            return cleanerList;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    public List<CleanerDTO> getCleanerList() {
+        try {
+            List<User> users = userRepository.findByRole("CLEANER");
             List<CleanerDTO> cleanerList = new ArrayList<CleanerDTO>();
-            cleanerList.add(new CleanerDTO("", "--select one--"));
+            int counter = 1;
             for(User user : users) {
                 CleanerDTO cleanerDTO = new CleanerDTO();
+                cleanerDTO.setSl(String.valueOf(counter++));
                 cleanerDTO.setId(String.valueOf(user.getUserId()));
                 cleanerDTO.setName(CommonUtil.getFormattedName(user));
+                cleanerDTO.setStatus(user.getStatus());
                 cleanerList.add(cleanerDTO);
             }
             return cleanerList;
@@ -110,5 +157,22 @@ public class UserService {
         }
     }
 
-
+    public CleanerDTO getCleanerById(Long id) {
+        try {
+            Optional<User> userOptional= userRepository.findById(id);
+            if(userOptional.isEmpty()) {
+                return new CleanerDTO();
+            }
+            User user = userOptional.get();
+            CleanerDTO cleanerDTO = new CleanerDTO();
+            cleanerDTO.setId(String.valueOf(user.getUserId()));
+            cleanerDTO.setName(CommonUtil.getFormattedName(user));
+            cleanerDTO.setStatus(user.getStatus());
+            return cleanerDTO;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return new CleanerDTO();
+        }
+    }
 }

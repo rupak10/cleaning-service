@@ -1,13 +1,16 @@
 package com.app.util;
 
 import com.app.dto.CalculationDTO;
+import com.app.dto.ListVo;
 import com.app.model.User;
 import jakarta.servlet.http.HttpSession;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class CommonUtil {
     public static Boolean isValueNotNullAndEmpty(Object key) {
@@ -61,12 +64,18 @@ public class CommonUtil {
 
     public static String getFormattedName(User user) {
         String name = user.getFirstName();
-        if(CommonUtil.isValueNotNullAndEmpty(user.getLasName())) {
-            name += " " + user.getLasName();
+        if(CommonUtil.isValueNotNullAndEmpty(user.getLastName())) {
+            name += " " + user.getLastName();
         }
         name += "(" + user.getGender() + ")";
         return name;
     }
 
-
+    public static List<ListVo> getStatusList() {
+        List<ListVo> list = new ArrayList<>();
+        list.add(new ListVo("", "--select one--"));
+        list.add(new ListVo("Pending", "Pending"));
+        list.add(new ListVo("Approved", "Approved"));
+        return list;
+    }
 }

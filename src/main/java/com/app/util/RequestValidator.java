@@ -1,6 +1,7 @@
 package com.app.util;
 
 import com.app.dto.BookingDTO;
+import com.app.dto.CleanerDTO;
 import com.app.dto.LoginRequest;
 import com.app.dto.SignupRequest;
 
@@ -47,6 +48,23 @@ public class RequestValidator {
                 return false;
             }
 
+            return true;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean isCleanerApprovalRequestValid(CleanerDTO cleanerDTO) {
+        try {
+            if(cleanerDTO == null) {
+                return false;
+            }
+            if(!CommonUtil.isValueNotNullAndEmpty(cleanerDTO.getId())) {
+                return false;
+            }
+            Long.valueOf(cleanerDTO.getId());
             return true;
         }
         catch (Exception e) {

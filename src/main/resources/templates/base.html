@@ -25,7 +25,9 @@
       </button>
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <!--<span style="margin-left: 178px;" th:text="${userFullName}"></span>-->
+          <p style="margin-left: 178px;">
+              <span th:text="${session.user.firstName}"></span>&nbsp;<span th:text="${session.user.lastName}"></span> (<span th:text="${session.user.role}"></span>)
+          </p>
         <ul class="navbar-nav ms-auto me-md-4 mb-lg-0">
           <li class="nav-item dropdown d-flex text-light">
 
@@ -61,21 +63,39 @@
               <span>Dashboard</span>
             </a>
           </li>
-          
-         <!-- <li class="nav-link bordered px-3">
-            <a href="/calories" class="nav-link px-3" th:classappend="${am == 'order' ? 'active' : ''}">
-              <span class="me-2"><i class="bi bi-intersect"></i></span>
-              <span>Orders</span>
-            </a>
-          </li>-->
-
-            <li class="nav-link bordered px-3">
+           <!-- <li class="nav-link bordered px-3">
                 <a href="/book-service" class="nav-link px-3" th:classappend="${am == 'book-service' ? 'active' : ''}">
                     <span class="me-2"><i class="bi bi-intersect"></i></span>
                     <span>Cleaning Service</span>
                 </a>
-            </li>
+            </li>-->
 
+            <th:block th:if="${session.user.role} == 'USER'">
+                <li class="nav-link bordered px-3">
+                    <a href="/book-service" class="nav-link px-3" th:classappend="${am == 'book-service' ? 'active' : ''}">
+                        <span class="me-2"><i class="bi bi-intersect"></i></span>
+                        <span>Cleaning Service</span>
+                    </a>
+                </li>
+            </th:block>
+
+            <th:block th:if="${session.user.role} == 'CLEANER'">
+                <li class="nav-link bordered px-3">
+                    <a href="/booking-order" class="nav-link px-3" th:classappend="${am == 'order' ? 'active' : ''}">
+                        <span class="me-2"><i class="bi bi-intersect"></i></span>
+                        <span>Orders</span>
+                    </a>
+                </li>
+            </th:block>
+
+            <th:block th:if="${session.user.role} == 'ADMIN'">
+                <li class="nav-link bordered px-3">
+                    <a href="/cleaner" class="nav-link px-3" th:classappend="${am == 'cleaner' ? 'active' : ''}">
+                        <span class="me-2"><i class="bi bi-intersect"></i></span>
+                        <span>Manager Cleaners</span>
+                    </a>
+                </li>
+            </th:block>
         </ul>
       </nav>
     </div>
