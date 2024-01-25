@@ -94,16 +94,90 @@ public class BookingService {
             return new ArrayList<>();
         }
         List<BookingDTO> bookingList = new ArrayList<>();
+        int counter = 1;
         for(Booking booking : bookings) {
             BookingDTO bookingDTO = new BookingDTO();
+            bookingDTO.setSl(String.valueOf(counter++));
             bookingDTO.setId(String.valueOf(booking.getId()));
             bookingDTO.setCleaner(CommonUtil.getFormattedName(booking.getCleaner()));
             bookingDTO.setHour(String.valueOf(booking.getHour()));
             bookingDTO.setTotalPrice(String.valueOf(booking.getTotalPrice()));
             bookingDTO.setCleaningType(booking.getCleaningType());
             bookingDTO.setCleaningDate(String.valueOf(booking.getCleaningDate()));
+            bookingDTO.setStatus(booking.getStatus());
             bookingList.add(bookingDTO);
         }
         return bookingList;
+    }
+
+    public AppResponse deleteBookingInfo(Long id) {
+        bookingRepository.deleteById(id);
+        return new AppResponse(true, "Booking info deleted");
+    }
+
+    public BookingDTO fetchBookingInfoById(Long id) {
+        try {
+            Optional<Booking> bookingOptional = bookingRepository.findById(id);
+            if(bookingOptional.isPresent()){
+                return processBookingInfo(bookingOptional.get());
+            }
+            return new BookingDTO();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return new BookingDTO();
+        }
+    }
+
+    private BookingDTO processBookingInfo(Booking booking) {
+        BookingDTO bookingDTO = new BookingDTO();
+
+        bookingDTO.setId(String.valueOf(booking.getId()));
+        bookingDTO.setCleaningDate(String.valueOf(booking.getCleaningDate()));
+        bookingDTO.setCleaningType(booking.getCleaningType());
+        bookingDTO.setHour(String.valueOf(booking.getHour()));
+        bookingDTO.setTotalPrice(String.valueOf(booking.getTotalPrice()));
+        bookingDTO.setCleaner(String.valueOf(booking.getCleaner().getUserId()));
+
+        return bookingDTO;
+    }
+
+    public AppResponse updateBookingInfo(BookingDTO bookingDTO, User loggedInUser) {
+        try {
+            if(!RequestValidator.isBookingAddRequestValid(bookingDTO)){
+                return new AppResponse(false, "Invalid value provided !");
+            }
+            if(!CommonUtil.isValueNotNullAndEmpty(bookingDTO.getId())) {
+                return new AppResponse(false, "Invalid value provided !");
+            }
+
+            Optional<Booking> bookingOptional = bookingRepository.findById(Long.valueOf(bookingDTO.getId()));
+            if(bookingOptional.isEmpty()) {
+                return new AppResponse(false, "Invalid value provided !");
+            }
+
+            Optional<User> userOptional = userRepository.findById(Long.valueOf(bookingDTO.getCleaner()));
+            if(userOptional.isEmpty()) {
+                return new AppResponse(false, "Invalid value provided !");
+            }
+
+            Booking existingBookingInfo = bookingOptional.get();
+            existingBookingInfo.setCleaner(userOptional.get());
+            existingBookingInfo.setHour(Double.parseDouble(bookingDTO.getHour()));
+            existingBookingInfo.setTotalPrice(Double.parseDouble(bookingDTO.getTotalPrice()));
+            existingBookingInfo.setCleaningDate(CommonUtil.getDateFromString(bookingDTO.getCleaningDate()));
+            existingBookingInfo.setCleaningType(bookingDTO.getCleaningType());
+
+            existingBookingInfo.setUpdatedBy(loggedInUser.getUserId());
+            existingBookingInfo.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+
+            bookingRepository.save(existingBookingInfo);
+
+            return new AppResponse(true, "Booking info updated successfully");
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return new AppResponse(false, "Failed to update booking info !");
+        }
     }
 }

@@ -35,41 +35,48 @@
 								<tr>
 									<th>SL</th>
 									<th>Date</th>
-									<th>Food Type</th>
-									<th>Amount of Food</th>
-									<th>Calories</th>
+									<th>Cleaning Type</th>
+									<th>Cleaner</th>
+									<th>Hour</th>
+									<th>Total Price</th>
+									<th>Status</th>
 									<th>Action</th>
 								</tr>
 							</thead>
-
-							<!--<tbody>
-								<tr th:each="calorie : ${calorieList}">
+							<tbody>
+								<tr th:each="booking : ${bookingList}">
 									<td>
-										<p th:text=${calorie.sl}></p>
+										<p th:text=${booking.sl}></p>
 									</td>
 									<td>
-										<p th:text=${calorie.intakeDate}></p>
+										<p th:text=${booking.cleaningDate}></p>
 									</td>
 									<td>
-										<p th:text=${calorie.foodType}></p>
+										<p th:text=${booking.cleaningType}></p>
 									</td>
 									<td>
-										<p th:text=${calorie.amountOfFood}></p>
+										<p th:text=${booking.cleaner}></p>
 									</td>
 									<td>
-										<p th:text=${calorie.calories}></p>
+										<p th:text=${booking.hour}></p>
 									</td>
 									<td>
-										<a th:href="@{/calories/edit/{id}(id=${calorie.id})}" class="btn btn-sm btn-warning">
+										<p th:text=${booking.totalPrice}></p>
+									</td>
+									<td>
+										<p th:text=${booking.status}></p>
+									</td>
+									<td>
+										<a th:href="@{/book-service/edit/{id}(id=${booking.id})}" class="btn btn-sm btn-warning">
 										    <i class="bi bi-pencil-square"></i>
 										</a>
 										
-										<a class="btn btn-sm btn-danger btnCalorieDel" th:attr="data-calorie=${calorie}">
+										<a class="btn btn-sm btn-danger btnBookingDel" th:attr="data-booking=${booking}">
 										    <i class="bi bi-trash-fill"></i>
 										</a>
 									</td>
 								</tr>
-							</tbody>-->
+							</tbody>
 							
 						</table>
 					</div>
@@ -81,31 +88,31 @@
 		<!-- main content end-->
 		
 		<!-- Modal -->
-		<div class="modal fade" id="calorieModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		  <div class="modal-dialog">
 		    <div class="modal-content">
 		      <div class="modal-header">
-		        <h5 class="modal-title" id="exampleModalLabel">Delete Calorie Info</h5>
+		        <h5 class="modal-title" id="exampleModalLabel">Delete Booking Info</h5>
 		        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 		      </div>
 		      <div class="modal-body">
 		      	<div class="container">
 			      	<div class="row">
 					 	<div class="col-md-12 mt-4">
-							 <label class="form-label">Are you sure to delete calorie info ?</label>
+							 <label class="form-label">Are you sure to delete booking info ?</label>
 					 	</div>  
 				 	</div>  
 				</div>
 		      </div>
 		      <div class="modal-footer">
-					<a class="btn btn-sm btn-danger" id="delCalorieBtn">Delete</a>
+					<a class="btn btn-sm btn-danger" id="delBookingBtn">Delete</a>
 		      </div>
 		    </div>
 		  </div>
 		</div>
 		<!-- Modal -->
 	
-		<!--<script th:src="@{/js/calorie/calorie.js}" type="text/javascript"></script>-->
+		<script th:src="@{/js/book-service/booking.js}" type="text/javascript"></script>
 	</section>
 
 </body>

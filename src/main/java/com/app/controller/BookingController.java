@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -54,7 +55,7 @@ public class BookingController {
 
         model.addAttribute("cleanerList", userService.getActiveCleanerList());
         model.addAttribute("cleaningTypeList", bookingService.getCleaningTypeList());
-        model.addAttribute("serviceTypeList", bookingService.getServiceTypeList());
+        //model.addAttribute("serviceTypeList", bookingService.getServiceTypeList());
 
         model.addAttribute("am", ACTIVE_MENU);
         log.info("Exiting loadAddPage() method");
@@ -81,52 +82,54 @@ public class BookingController {
         }
     }
 
-
-    /*
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
-    public String loadCalorieEditPage(@PathVariable("id") Long id, Model model, HttpSession httpSession) {
-        log.info("Entering loadCalorieEditPage() method");
-        log.info("Calorie ID : "+id);
+    public String loadBookingEditPage(@PathVariable("id") Long id, Model model, HttpSession httpSession) {
+        log.info("Entering loadBookingEditPage() method");
+        log.info("Booking ID : "+id);
 
-        CalorieDTO calorieDTO = calorieService.fetchCalorieById(id);
+        BookingDTO bookingDTO = bookingService.fetchBookingInfoById(id);
 
-        model.addAttribute("pageTitle", "Edit Calorie");
-        model.addAttribute("calorie", calorieDTO);
+        model.addAttribute("pageTitle", "Edit Booking Info");
+        model.addAttribute("bookingDTO", bookingDTO);
         model.addAttribute("am", ACTIVE_MENU);
 
-        log.info("Exiting loadCalorieEditPage() method");
-        return CALORIE_EDIT_PAGE;
+        model.addAttribute("cleanerList", userService.getActiveCleanerList());
+        model.addAttribute("cleaningTypeList", bookingService.getCleaningTypeList());
+
+        log.info("Exiting loadBookingEditPage() method");
+        return EDIT_PAGE;
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    public String editCalorie(Model model, @ModelAttribute CalorieDTO calorieDTO, HttpSession httpSession,
+    public String editBookingInfo(Model model, @ModelAttribute BookingDTO bookingDTO, HttpSession httpSession,
                               final RedirectAttributes redirectAttributes) {
-        log.info("Entering editCalorie() method");
+        log.info("Entering editBookingInfo() method");
+        System.out.println("bookingDTO : "+bookingDTO);
 
-        AppResponse appResponse = calorieService.updateCalorieInfo(calorieDTO, CommonUtil.getUserFromSession(httpSession));
+        AppResponse appResponse = bookingService.updateBookingInfo(bookingDTO, CommonUtil.getUserFromSession(httpSession));
         if(appResponse.getStatus()){
             redirectAttributes.addFlashAttribute("activity_msg", appResponse.getMessage());
-            log.info("Exiting editCalorie() method");
-            return REDIRECT_CALORIE_LIST_PAGE;
+            log.info("Exiting editBookingInfo() method");
+            return REDIRECT_TO_LIST_PAGE;
         }
         else{
             model.addAttribute("msg", appResponse.getMessage());
-            model.addAttribute("calorie", calorieDTO);
-            log.info("Exiting editCalorie() method");
-            return CALORIE_EDIT_PAGE;
+            model.addAttribute("bookingDTO", bookingDTO);
+            log.info("Exiting editBookingInfo() method");
+            return EDIT_PAGE;
         }
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
-    public String deleteCalorieInfo(@PathVariable("id") Long id, HttpSession httpSession, final RedirectAttributes redirectAttributes) {
-        log.info("Entering deleteCalorieInfo() method");
-        log.info("Calorie ID : "+id);
+    public String deleteBookingInfo(@PathVariable("id") Long id, HttpSession httpSession, final RedirectAttributes redirectAttributes) {
+        log.info("Entering deleteBookingInfo() method");
+        log.info("Booking ID : "+id);
 
-        AppResponse appResponse = calorieService.deleteCalorieInfo(id);
+        AppResponse appResponse = bookingService.deleteBookingInfo(id);
         redirectAttributes.addFlashAttribute("activity_msg", appResponse.getMessage());
 
-        log.info("Exiting deleteCalorieInfo() method");
-        return REDIRECT_CALORIE_LIST_PAGE;
+        log.info("Exiting deleteBookingInfo() method");
+        return REDIRECT_TO_LIST_PAGE;
     }
-     */
+
 }

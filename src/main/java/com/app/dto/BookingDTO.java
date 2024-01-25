@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookingDTO {
+    private String sl;
     private String id;
     private String cleaner;
     //normal cleaning, deep cleaning or kitchen cleaning

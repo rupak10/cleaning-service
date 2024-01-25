@@ -68,7 +68,7 @@ public class UserService {
             }
             else {
                 user.setRole("ROLE_CLEANER");
-                user.setStatus(0); //initially inactive. Admin will approve later
+                user.setStatus(1);
             }
             user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
             userRepository.save(user);
