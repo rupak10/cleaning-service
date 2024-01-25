@@ -8,11 +8,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookingDTO {
+    private String id;
     private String cleaner;
-    private String cleaningType; //normal cleaning, deep cleaning or kitchen cleaning
-    private String serviceType; //one time, two weeks or monthly cleaning
-
-    //applicable for one time cleaning
+    //normal cleaning, deep cleaning or kitchen cleaning
+    private String cleaningType;
+    //one time, two weeks or monthly cleaning
+    //private String serviceType;
     private String cleaningDate;
-    private String cleaningTime;
+    private String hour;
+    private String totalPrice;
+
+    private String status;
 }

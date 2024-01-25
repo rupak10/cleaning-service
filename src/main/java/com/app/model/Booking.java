@@ -22,29 +22,35 @@ public class Booking {
     @Column(name = "cleaning_type", nullable = false)
     private String cleaningType;
 
-    @Column(name = "service_type", nullable = false)
-    private String serviceType;
+ /*   @Column(name = "service_type", nullable = false)
+    private String serviceType;*/
 
     @Column(name = "cleaning_date")
     @Temporal(TemporalType.DATE)
     private Date cleaningDate;
 
-    @Column(name = "cleaning_time")
-    private String cleaningTime;
+    @Column(name = "hour")
+    private Double hour;
+
+    @Column(name = "total_price")
+    private Double totalPrice;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId", nullable = false)
-    private User user;
+    @JoinColumn(name = "cleaner_id", nullable = false)
+    private User cleaner;
 
-    @Column(name = "created_by")
-    private Long createdBy;
+    @Column(name = "booked_by")
+    private Long bookedBy;
 
-    @Column(name = "created_at")
-    private Timestamp createdAt;
+    @Column(name = "booked_at")
+    private Timestamp bookedAt;
 
     @Column(name = "updated_by")
     private Long updatedBy;
 
     @Column(name = "updated_at")
     private Timestamp updatedAt;
+
+    @Column(name = "status")
+    private String status;
 }

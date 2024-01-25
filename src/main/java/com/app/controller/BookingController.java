@@ -13,15 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/book-service")
-public class BookServiceController {
-    private final Logger log = LoggerFactory.getLogger(BookServiceController.class);
+public class BookingController {
+    private final Logger log = LoggerFactory.getLogger(BookingController.class);
     private final String ADD_PAGE = "book-service/add";
     private final String EDIT_PAGE = "book-service/edit";
     private final String LIST_PAGE = "book-service/list";
@@ -30,6 +29,7 @@ public class BookServiceController {
 
     @Autowired
     private BookingService bookingService;
+
     @Autowired
     private UserService userService;
 
@@ -38,7 +38,7 @@ public class BookServiceController {
         log.info("Entering loadListPage() method");
         model.addAttribute("pageTitle", "Booking List");
 
-        //model.addAttribute("bookingList", calorieService.getCalorieInfoList(CommonUtil.getUserFromSession(httpSession)));
+        model.addAttribute("bookingList", bookingService.getBookingList(CommonUtil.getUserFromSession(httpSession)));
         model.addAttribute("am", ACTIVE_MENU);
 
         log.info("Exiting loadListPage() method");
@@ -61,27 +61,28 @@ public class BookServiceController {
         return ADD_PAGE;
     }
 
-    /*
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String addCalorie(Model model, HttpSession httpSession, @ModelAttribute CalorieDTO calorieDTO,
+    public String addBooking(Model model, HttpSession httpSession, @ModelAttribute BookingDTO bookingDTO,
                              final RedirectAttributes redirectAttributes) {
-        log.info("Entering addCalorie() method");
-        log.info("calorieDTO request:"+calorieDTO);
+        log.info("Entering addBooking() method");
+        log.info("bookingDTO request:"+bookingDTO);
 
-        AppResponse appResponse = calorieService.addCalorie(calorieDTO, CommonUtil.getUserFromSession(httpSession));
+        AppResponse appResponse = bookingService.addBooking(bookingDTO, CommonUtil.getUserFromSession(httpSession));
         if(appResponse.getStatus()){
             redirectAttributes.addFlashAttribute("activity_msg", appResponse.getMessage());
-            log.info("Exiting addCalorie() method");
-            return REDIRECT_CALORIE_LIST_PAGE;
+            log.info("Exiting addBooking() method");
+            return REDIRECT_TO_LIST_PAGE;
         }
         else{
             model.addAttribute("msg", appResponse.getMessage());
-            model.addAttribute("calorie", calorieDTO);
-            log.info("Exiting addCalorie() method");
-            return CALORIE_ADD_PAGE;
+            model.addAttribute("bookingDTO", bookingDTO);
+            log.info("Exiting addBooking() method");
+            return ADD_PAGE;
         }
     }
 
+
+    /*
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public String loadCalorieEditPage(@PathVariable("id") Long id, Model model, HttpSession httpSession) {
         log.info("Entering loadCalorieEditPage() method");

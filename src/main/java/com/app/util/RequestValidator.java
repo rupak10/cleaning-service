@@ -1,5 +1,6 @@
 package com.app.util;
 
+import com.app.dto.BookingDTO;
 import com.app.dto.LoginRequest;
 import com.app.dto.SignupRequest;
 
@@ -25,4 +26,32 @@ public class RequestValidator {
                 && CommonUtil.isValueNotNullAndEmpty(loginRequest.getPassword());
     }
 
+    public static boolean isBookingAddRequestValid(BookingDTO bookingDTO) {
+        try {
+            if(bookingDTO == null) {
+                return false;
+            }
+            if(!CommonUtil.isValueNotNullAndEmpty(bookingDTO.getCleaner())
+                    || !CommonUtil.isValueNotNullAndEmpty(bookingDTO.getHour())
+                    || !CommonUtil.isValueNotNullAndEmpty(bookingDTO.getCleaningDate())
+                    || !CommonUtil.isValueNotNullAndEmpty(bookingDTO.getTotalPrice())
+                    || !CommonUtil.isValueNotNullAndEmpty(bookingDTO.getCleaningType())) {
+                return false;
+            }
+            Double.parseDouble(bookingDTO.getHour());
+            Double.parseDouble(bookingDTO.getTotalPrice());
+            CommonUtil.getDateFromString(bookingDTO.getCleaningDate());
+            Long.valueOf(bookingDTO.getCleaner());
+
+            if(Double.parseDouble(bookingDTO.getTotalPrice()) < 0) {
+                return false;
+            }
+
+            return true;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

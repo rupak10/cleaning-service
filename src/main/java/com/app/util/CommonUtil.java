@@ -1,5 +1,6 @@
 package com.app.util;
 
+import com.app.dto.CalculationDTO;
 import com.app.model.User;
 import jakarta.servlet.http.HttpSession;
 import org.mindrot.jbcrypt.BCrypt;
@@ -35,24 +36,37 @@ public class CommonUtil {
         }
     }
 
-  /*  public static String getUserFullName(HttpSession httpSession) {
-        String userFullName = "";
-        try{
-            User user = (User) httpSession.getAttribute("user");
-            if(user != null) {
-                if(isValueNotNullAndEmpty(user.getFirstName())) {
-                    userFullName += user.getFirstName();
-                }
-                if(isValueNotNullAndEmpty(user.getSurname())) {
-                    userFullName += " " + user.getSurname();
-                }
+    public static Double calculateTotalCleaningPrice(CalculationDTO calculationDTO) {
+        try {
+            Double totalPrice = (double) 0;
+            Double hour = Double.parseDouble(calculationDTO.getHour());
+            String cleaningType = calculationDTO.getCleaningType();
+
+            if(cleaningType.equals("Normal Cleaning")){
+                totalPrice += (Constants.NORMAL_CLEANING_PRICE_PER_HOUR.doubleValue()*hour);
             }
-            return userFullName;
+            else if(cleaningType.equals("Deep Cleaning")){
+                totalPrice += (Constants.DEEP_CLEANING_PRICE_PER_HOUR.doubleValue()*hour);
+            }
+            else {
+                totalPrice += (Constants.KITCHEN_CLEANING_PRICE_PER_HOUR.doubleValue()*hour);
+            }
+            return totalPrice;
         }
         catch (Exception e) {
-            return userFullName;
+            e.printStackTrace();
+            return (double) 0;
         }
-    }*/
+    }
+
+    public static String getFormattedName(User user) {
+        String name = user.getFirstName();
+        if(CommonUtil.isValueNotNullAndEmpty(user.getLasName())) {
+            name += " " + user.getLasName();
+        }
+        name += "(" + user.getGender() + ")";
+        return name;
+    }
 
 
 }

@@ -99,7 +99,7 @@ public class UserService {
             for(User user : users) {
                 CleanerDTO cleanerDTO = new CleanerDTO();
                 cleanerDTO.setId(String.valueOf(user.getUserId()));
-                cleanerDTO.setName(getFormattedName(user));
+                cleanerDTO.setName(CommonUtil.getFormattedName(user));
                 cleanerList.add(cleanerDTO);
             }
             return cleanerList;
@@ -110,12 +110,5 @@ public class UserService {
         }
     }
 
-    private String getFormattedName(User user) {
-        String name = user.getFirstName();
-        if(CommonUtil.isValueNotNullAndEmpty(user.getLasName())) {
-            name += " " + user.getLasName();
-        }
-        name += "(" + user.getGender() + ")";
-        return name;
-    }
+
 }
