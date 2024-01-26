@@ -62,7 +62,7 @@ public class BookingService {
             booking.setCleaningDate(CommonUtil.getDateFromString(bookingDTO.getCleaningDate()));
             booking.setTotalPrice(Double.parseDouble(bookingDTO.getTotalPrice()));
 
-            booking.setBookedBy(loggedInUser.getUserId());
+            booking.setBookedBy(loggedInUser);
             booking.setBookedAt(new Timestamp(System.currentTimeMillis()));
 
             booking.setStatus("Pending"); //initially pending. Cleaner will accept later
@@ -80,34 +80,13 @@ public class BookingService {
 
     public List<BookingDTO> getBookingList(User loggedInuser) {
         try {
-            List<Booking> bookings = bookingRepository.findByBookedBy(loggedInuser.getUserId());
+            List<Booking> bookings = bookingRepository.findByBookedBy(loggedInuser);
             return prepareBookingList(bookings);
         }
         catch (Exception e) {
             e.printStackTrace();
             return new ArrayList<>();
         }
-    }
-
-    private List<BookingDTO> prepareBookingList(List<Booking> bookings) {
-        if(bookings == null || bookings.isEmpty()) {
-            return new ArrayList<>();
-        }
-        List<BookingDTO> bookingList = new ArrayList<>();
-        int counter = 1;
-        for(Booking booking : bookings) {
-            BookingDTO bookingDTO = new BookingDTO();
-            bookingDTO.setSl(String.valueOf(counter++));
-            bookingDTO.setId(String.valueOf(booking.getId()));
-            bookingDTO.setCleaner(CommonUtil.getFormattedName(booking.getCleaner()));
-            bookingDTO.setHour(String.valueOf(booking.getHour()));
-            bookingDTO.setTotalPrice(String.valueOf(booking.getTotalPrice()));
-            bookingDTO.setCleaningType(booking.getCleaningType());
-            bookingDTO.setCleaningDate(String.valueOf(booking.getCleaningDate()));
-            bookingDTO.setStatus(booking.getStatus());
-            bookingList.add(bookingDTO);
-        }
-        return bookingList;
     }
 
     public AppResponse deleteBookingInfo(Long id) {
@@ -127,19 +106,6 @@ public class BookingService {
             e.printStackTrace();
             return new BookingDTO();
         }
-    }
-
-    private BookingDTO processBookingInfo(Booking booking) {
-        BookingDTO bookingDTO = new BookingDTO();
-
-        bookingDTO.setId(String.valueOf(booking.getId()));
-        bookingDTO.setCleaningDate(String.valueOf(booking.getCleaningDate()));
-        bookingDTO.setCleaningType(booking.getCleaningType());
-        bookingDTO.setHour(String.valueOf(booking.getHour()));
-        bookingDTO.setTotalPrice(String.valueOf(booking.getTotalPrice()));
-        bookingDTO.setCleaner(String.valueOf(booking.getCleaner().getUserId()));
-
-        return bookingDTO;
     }
 
     public AppResponse updateBookingInfo(BookingDTO bookingDTO, User loggedInUser) {
@@ -180,4 +146,83 @@ public class BookingService {
             return new AppResponse(false, "Failed to update booking info !");
         }
     }
+
+    public List<BookingDTO> getOrderListForCleaner(User loggedInuser) {
+        try {
+            List<Booking> bookings = bookingRepository.findByCleaner(loggedInuser);
+            return prepareBookingList(bookings);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    public AppResponse acceptOrCancelOrder(BookingDTO bookingDTO, User loggedInUser) {
+        try {
+            if(!CommonUtil.isValueNotNullAndEmpty(bookingDTO.getId())) {
+                return new AppResponse(false, "Invalid value provided !");
+            }
+
+            Optional<Booking> bookingOptional = bookingRepository.findById(Long.valueOf(bookingDTO.getId()));
+            if(bookingOptional.isEmpty()) {
+                return new AppResponse(false, "Invalid value provided !");
+            }
+
+            Booking existingBookingInfo = bookingOptional.get();
+            existingBookingInfo.setStatus(bookingDTO.getActionStatus());
+
+            existingBookingInfo.setUpdatedBy(loggedInUser.getUserId());
+            existingBookingInfo.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+
+            bookingRepository.save(existingBookingInfo);
+
+            return new AppResponse(true, "Booking info updated successfully");
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return new AppResponse(false, "Failed to update booking info !");
+        }
+    }
+
+    private List<BookingDTO> prepareBookingList(List<Booking> bookings) {
+        if(bookings == null || bookings.isEmpty()) {
+            return new ArrayList<>();
+        }
+        List<BookingDTO> bookingList = new ArrayList<>();
+        int counter = 1;
+        for(Booking booking : bookings) {
+            BookingDTO bookingDTO = new BookingDTO();
+            bookingDTO.setSl(String.valueOf(counter++));
+            bookingDTO.setId(String.valueOf(booking.getId()));
+            bookingDTO.setCleaner(CommonUtil.getFormattedName(booking.getCleaner()));
+            bookingDTO.setHour(String.valueOf(booking.getHour()));
+            bookingDTO.setTotalPrice(String.valueOf(booking.getTotalPrice()));
+            bookingDTO.setCleaningType(booking.getCleaningType());
+            bookingDTO.setCleaningDate(String.valueOf(booking.getCleaningDate()));
+            bookingDTO.setStatus(booking.getStatus());
+            User bookedBy = booking.getBookedBy();
+            bookingDTO.setBookedBy(bookedBy.getFirstName() + " " + bookedBy.getLastName());
+            bookingList.add(bookingDTO);
+        }
+        return bookingList;
+    }
+
+    private BookingDTO processBookingInfo(Booking booking) {
+        BookingDTO bookingDTO = new BookingDTO();
+
+        bookingDTO.setId(String.valueOf(booking.getId()));
+        bookingDTO.setCleaningDate(String.valueOf(booking.getCleaningDate()));
+        bookingDTO.setCleaningType(booking.getCleaningType());
+        bookingDTO.setHour(String.valueOf(booking.getHour()));
+        bookingDTO.setTotalPrice(String.valueOf(booking.getTotalPrice()));
+        bookingDTO.setCleaner(String.valueOf(booking.getCleaner().getUserId()));
+
+        User bookedBy = booking.getBookedBy();
+        bookingDTO.setBookedBy(bookedBy.getFirstName() + " " + bookedBy.getLastName());
+
+        return bookingDTO;
+    }
+
+
 }

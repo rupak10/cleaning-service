@@ -15,7 +15,7 @@
 				<nav class="mt-1 mb-5" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item"><a href="/">Home</a></li>
-						<li class="breadcrumb-item"><a href="/cleaner">Manage Cleaners</a></li>
+						<li class="breadcrumb-item"><a href="/order">Orders</a></li>
 					</ol>
 				</nav>
 				
@@ -30,35 +30,41 @@
 							<thead>
 								<tr>
 									<th>SL</th>
-									<th>Cleaner</th>
+									<th>Request From</th>
+									<th>Date</th>
+									<th>Hour</th>
+									<th>Total Price</th>
 									<th>Status</th>
 									<th>Action</th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr th:each="cleaner : ${cleanerList}">
+								<tr th:each="order : ${orderList}">
 									<td>
-										<p th:text=${cleaner.sl}></p>
+										<p th:text=${order.sl}></p>
 									</td>
 									<td>
-										<p th:text=${cleaner.name}></p>
+										<p th:text=${order.bookedBy}></p>
 									</td>
 									<td>
-										<p th:text=${cleaner.status}></p>
+										<p th:text=${order.cleaningDate}></p>
 									</td>
 									<td>
-										<th:block th:if="${cleaner.status != 'Approved'}">
-											<a th:href="@{/cleaner/edit/{id}(id=${cleaner.id})}" class="btn btn-sm btn-warning">
+										<p th:text=${order.hour}></p>
+									</td>
+									<td>
+										<p th:text=${order.totalPrice}></p>
+									</td>
+									<td>
+										<p th:text=${order.status}></p>
+									</td>
+									<td>
+										<th:block th:if="${order.status == 'Pending'}">
+											<a th:href="@{/order/edit/{id}(id=${order.id})}" class="btn btn-sm btn-warning">
 												<i class="bi bi-pencil-square"></i>
 											</a>
 										</th:block>
 									</td>
-
-									<!--<td>
-										<a th:href="@{/cleaner/edit/{id}(id=${cleaner.id})}" class="btn btn-sm btn-warning">
-										    <i class="bi bi-pencil-square"></i>
-										</a>
-									</td>-->
 								</tr>
 							</tbody>
 							

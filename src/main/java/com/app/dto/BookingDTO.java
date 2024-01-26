@@ -20,4 +20,7 @@ public class BookingDTO {
     private String totalPrice;
 
     private String status;
+    private String bookedBy;
+
+    private String actionStatus;
 }

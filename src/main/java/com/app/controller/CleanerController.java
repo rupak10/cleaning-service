@@ -33,7 +33,7 @@ public class CleanerController {
     @RequestMapping(method = RequestMethod.GET)
     public String loadPendingCleanerPage(Model model, HttpSession httpSession) {
         log.info("Entering loadPendingCleanerPage() method");
-        model.addAttribute("pageTitle", "Pending Cleaner List");
+        model.addAttribute("pageTitle", "Manage Cleaners");
 
         model.addAttribute("cleanerList", userService.getCleanerList());
         model.addAttribute("am", ACTIVE_MENU);

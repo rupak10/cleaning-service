@@ -39,8 +39,9 @@ public class Booking {
     @JoinColumn(name = "cleaner_id", nullable = false)
     private User cleaner;
 
-    @Column(name = "booked_by")
-    private Long bookedBy;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "booked_by", nullable = false)
+    private User bookedBy;
 
     @Column(name = "booked_at")
     private Timestamp bookedAt;

@@ -1,6 +1,5 @@
 package com.app.controller;
 
-
 import com.app.dto.AppResponse;
 import com.app.dto.BookingDTO;
 import com.app.service.BookingService;
