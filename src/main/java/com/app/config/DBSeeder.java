@@ -25,7 +25,7 @@ public class DBSeeder {
             User user = new User();
             user.setFirstName("Jabbi");
             user.setLastName("01");
-            user.setGender("Male");
+            user.setGender("MALE");
             user.setEmail("jabbi@gmail.com");
             user.setStatus("Approved");
             user.setRole("ADMIN");

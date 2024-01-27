@@ -193,11 +193,68 @@ public class UserService {
             user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
 
             userRepository.save(user);
-            return new AppResponse(true, "Password changed successfully.");
+            return new AppResponse(true, "Password changed successfully");
         }
         catch (Exception e) {
             e.printStackTrace();
             return new AppResponse(false, "Failed to approve cleaner !");
+        }
+    }
+
+    public ProfileDTO fetchProfileInfo(User loggedInUser) {
+        try {
+            Optional<User> userOptional = userRepository.findById(loggedInUser.getUserId());
+            if(userOptional.isEmpty()){
+                return new ProfileDTO();
+            }
+
+            User user = userOptional.get();
+            return getProfileInfo(user);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return new ProfileDTO();
+        }
+    }
+
+    private ProfileDTO getProfileInfo(User user) {
+        ProfileDTO profileDTO = new ProfileDTO();
+        profileDTO.setFirstName(user.getFirstName());
+        profileDTO.setLastName(user.getLastName());
+        profileDTO.setGender(user.getGender());
+        return profileDTO;
+    }
+
+    public List<ListVo> getGenderList() {
+        List<ListVo> list = new ArrayList<>();
+        list.add(new ListVo("", "--select one--"));
+        list.add(new ListVo("MALE", "Male"));
+        list.add(new ListVo("FEMALE", "Female"));
+        list.add(new ListVo("OTHER", "Other"));
+        return list;
+    }
+
+    public AppResponse updateProfile(ProfileDTO profileDTO, User loggedInUser) {
+        try {
+            Optional<User> userOptional = userRepository.findById(loggedInUser.getUserId());
+            if(userOptional.isEmpty()){
+                return new AppResponse(false, "Invalid user !");
+            }
+
+            User user = userOptional.get();
+            user.setFirstName(profileDTO.getFirstName());
+            user.setLastName(profileDTO.getLastName());
+            user.setGender(profileDTO.getGender());
+
+            user.setUpdatedBy(loggedInUser.getUserId());
+            user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+
+            userRepository.save(user);
+            return new AppResponse(true, "Profile updated successfully");
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return new AppResponse(false, "Failed to update profile !");
         }
     }
 }
