@@ -55,8 +55,11 @@
 									<td>
 										<p th:text=${order.totalPrice}></p>
 									</td>
-									<td>
+									<!--<td>
 										<p th:text=${order.status}></p>
+									</td>-->
+									<td>
+										<p th:text="${order.status}" th:class="${order.status eq 'Accepted By Cleaner' ? 'accepted-class' : (order.status eq 'Rejected By Cleaner' ? 'rejected-class' : 'default-class')}"></p>
 									</td>
 									<td>
 										<th:block th:if="${order.status == 'Pending'}">

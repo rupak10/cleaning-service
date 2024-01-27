@@ -64,13 +64,14 @@
 										<p th:text=${booking.totalPrice}></p>
 									</td>
 									<td>
-										<p th:text=${booking.status}></p>
+										<p th:text="${booking.status}" th:class="${booking.status eq 'Accepted By Cleaner' ? 'accepted-class' : (booking.status eq 'Rejected By Cleaner' ? 'rejected-class' : 'default-class')}"></p>
 									</td>
 									<td>
-										<a th:href="@{/book-service/edit/{id}(id=${booking.id})}" class="btn btn-sm btn-warning">
-										    <i class="bi bi-pencil-square"></i>
-										</a>
-										
+										<th:block th:if="${booking.status eq 'Pending'}">
+											<a th:href="@{/book-service/edit/{id}(id=${booking.id})}" class="btn btn-sm btn-warning">
+												<i class="bi bi-pencil-square"></i>
+											</a>
+										</th:block>
 										<a class="btn btn-sm btn-danger btnBookingDel" th:attr="data-booking=${booking}">
 										    <i class="bi bi-trash-fill"></i>
 										</a>

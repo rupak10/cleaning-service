@@ -92,3 +92,18 @@ a {
   width: 120px;
   text-align: end;
 }
+
+.rejected-class {
+    color: red;
+    font-weight:bold;
+}
+
+.accepted-class {
+    color: green;
+    font-weight:bold;
+}
+
+.default-class {
+    color: #3445B4;
+    font-weight:bold;
+}
