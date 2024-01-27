@@ -1,9 +1,6 @@
 package com.app.util;
 
-import com.app.dto.BookingDTO;
-import com.app.dto.CleanerDTO;
-import com.app.dto.LoginRequest;
-import com.app.dto.SignupRequest;
+import com.app.dto.*;
 
 public class RequestValidator {
 
@@ -65,6 +62,25 @@ public class RequestValidator {
                 return false;
             }
             Long.valueOf(cleanerDTO.getId());
+            return true;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean isPasswordChangeRequestValid(PasswordChangeDTO passwordChangeDTO) {
+        try {
+            if(passwordChangeDTO == null) {
+                return false;
+            }
+            if(!CommonUtil.isValueNotNullAndEmpty(passwordChangeDTO.getNewPassword()) || !CommonUtil.isValueNotNullAndEmpty(passwordChangeDTO.getConfirmNewPassword())) {
+                return false;
+            }
+            if(!passwordChangeDTO.getNewPassword().equals(passwordChangeDTO.getConfirmNewPassword())){
+                return false;
+            }
             return true;
         }
         catch (Exception e) {

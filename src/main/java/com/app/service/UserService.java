@@ -175,4 +175,29 @@ public class UserService {
             return new CleanerDTO();
         }
     }
+
+    public AppResponse changePassword(PasswordChangeDTO passwordChangeDTO, User loggedInUser) {
+        try {
+            Optional<User> userOptional = userRepository.findById(loggedInUser.getUserId());
+            if(userOptional.isEmpty()){
+                return new AppResponse(false, "Invalid user !");
+            }
+
+            if(!RequestValidator.isPasswordChangeRequestValid(passwordChangeDTO)){
+                return new AppResponse(false, "Invalid input !");
+            }
+
+            User user = userOptional.get();
+            user.setPassword(CommonUtil.getEncodedPassword(passwordChangeDTO.getNewPassword()));
+            user.setUpdatedBy(loggedInUser.getUserId());
+            user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+
+            userRepository.save(user);
+            return new AppResponse(true, "Password changed successfully.");
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return new AppResponse(false, "Failed to approve cleaner !");
+        }
+    }
 }

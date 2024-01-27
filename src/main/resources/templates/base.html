@@ -90,6 +90,36 @@
                     </a>
                 </li>
             </th:block>
+            <li class="nav-link bordered px-3">
+                <a class="nav-link px-3 sidebar-link" data-bs-toggle="collapse" href="#collapseExample" role="button"
+                   aria-expanded="false" aria-controls="collapseExample" th:classappend="${am == 'password-change' or am == 'profile-update' ? 'active' : ''}" >
+              <span class="me-2">
+                <i class="bi bi-people-fill"></i>
+              </span>
+                    <span>Profile Management</span>
+                    <span class="right-icon ms-auto">
+                <i class="bi bi-chevron-down"></i>
+              </span>
+                </a>
+                <div class="collapse" id="collapseExample" th:classappend="${am == 'password-change' or am == 'profile-update' ? 'show' : ''}">
+                    <div>
+                        <ul class="navbar-nav ps-3">
+                            <li>
+                                <a href="/profile/password-change" class="nav-link px-3" th:classappend="${am == 'password-change' ? 'active' : ''}">
+                                    <span class="me-2"><i class="bi bi-1-circle"></i></span>
+                                    <span>Password Change</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/profile/edit" class="nav-link px-3" th:classappend="${am == 'profile-update' ? 'active' : ''}">
+                                    <span class="me-2"><i class="bi bi-2-circle"></i></span>
+                                    <span>Update Info</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
         </ul>
       </nav>
     </div>
