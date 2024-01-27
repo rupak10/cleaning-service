@@ -23,6 +23,9 @@
 					<div th:if="${msg}" class="col-md-6 mb-3 alert alert-danger" style="margin-left:10px;">
 						<span th:text="${msg}"></span>
 					</div>
+					<div th:if="${success_msg}" class="col-md-6 mb-3 alert alert-success" style="margin-left:10px;">
+						<span th:text="${success_msg}"></span>
+					</div>
 				</div>
 
 				<form th:action="@{/profile/edit}" th:object="${profileDTO}" method="post">

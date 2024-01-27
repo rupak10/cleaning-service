@@ -86,10 +86,11 @@ public class ProfileController {
 
         AppResponse appResponse = userService.updateProfile(profileDTO, CommonUtil.getUserFromSession(httpSession));
         if(appResponse.getStatus()){
-            redirectAttributes.addFlashAttribute("activity_msg", appResponse.getMessage());
+            model.addAttribute("success_msg", appResponse.getMessage());
+            model.addAttribute("genderList", userService.getGenderList());
+            model.addAttribute("profileDTO", profileDTO);
             log.info("Exiting updateProfile() method");
-            httpSession.invalidate();
-            return REDIRECT_LOGIN_PAGE;
+            return PROFILE_EDIT_PAGE;
         }
         else{
             model.addAttribute("msg", appResponse.getMessage());
