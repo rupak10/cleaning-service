@@ -10,8 +10,14 @@ import lombok.NoArgsConstructor;
 public class SignupRequest {
     private String firstName;
     private String lastName;
+    private String gender;
+
+    private String address;
+    private String postCode;
+    private String city;
+    private String telephone;
+
     private String email;
     private String password;
-    private String gender;
     private String registrationType;
 }

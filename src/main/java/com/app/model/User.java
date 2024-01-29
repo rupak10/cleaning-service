@@ -24,6 +24,21 @@ public class User {
 	@Column(name = "last_name")
 	private String lastName;
 
+	@Column(name = "gender", nullable = false)
+	private String gender;
+
+	@Column(name = "address", nullable = false)
+	private String address;
+
+	@Column(name = "post_code", nullable = false)
+	private String postCode;
+
+	@Column(name = "city", nullable = false)
+	private String city;
+
+	@Column(name = "telephone", nullable = false)
+	private String telephone;
+
 	@Column(name = "email", nullable = false, unique = true)
 	private String email;
 
@@ -32,9 +47,6 @@ public class User {
 
 	@Column(name = "role", nullable = false)
 	private String role;
-
-	@Column(name = "gender", nullable = false)
-	private String gender;
 
 	@Column(name = "created_by")
 	private Long createdBy;

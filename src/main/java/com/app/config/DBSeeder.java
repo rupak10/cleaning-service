@@ -30,6 +30,12 @@ public class DBSeeder {
             user.setStatus("Approved");
             user.setRole("ADMIN");
             user.setPassword(CommonUtil.getEncodedPassword("123456"));
+
+            user.setAddress("United Kingdom");
+            user.setCity("London");
+            user.setPostCode("E16AN");
+            user.setTelephone("454545455");
+
             user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
             userRepository.save(user);
         }

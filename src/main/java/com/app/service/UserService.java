@@ -59,9 +59,13 @@ public class UserService {
             User user = new User();
             user.setFirstName(signupRequest.getFirstName());
             user.setLastName(signupRequest.getLastName());
+            user.setGender(signupRequest.getGender());
+            user.setAddress(signupRequest.getAddress());
+            user.setPostCode(signupRequest.getPostCode());
+            user.setCity(signupRequest.getCity());
+            user.setTelephone(signupRequest.getTelephone());
             user.setEmail(signupRequest.getEmail());
             user.setPassword(CommonUtil.getEncodedPassword(signupRequest.getPassword()));
-            user.setGender(signupRequest.getGender());
 
             if(signupRequest.getRegistrationType().equals("USER")){
                 user.setRole("USER");
@@ -222,6 +226,12 @@ public class UserService {
         profileDTO.setFirstName(user.getFirstName());
         profileDTO.setLastName(user.getLastName());
         profileDTO.setGender(user.getGender());
+
+        profileDTO.setAddress(user.getAddress());
+        profileDTO.setCity(user.getCity());
+        profileDTO.setTelephone(user.getTelephone());
+        profileDTO.setPostCode(user.getPostCode());
+
         return profileDTO;
     }
 
@@ -245,6 +255,11 @@ public class UserService {
             user.setFirstName(profileDTO.getFirstName());
             user.setLastName(profileDTO.getLastName());
             user.setGender(profileDTO.getGender());
+
+            user.setAddress(profileDTO.getAddress());
+            user.setCity(profileDTO.getCity());
+            user.setPostCode(profileDTO.getPostCode());
+            user.setTelephone(profileDTO.getTelephone());
 
             user.setUpdatedBy(loggedInUser.getUserId());
             user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
